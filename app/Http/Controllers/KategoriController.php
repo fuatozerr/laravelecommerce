@@ -13,8 +13,11 @@ class KategoriController extends Controller
 
         $alt_kategoriler=Kategori::where('ust_id',$kategori->id)->get();
 
+        $urunler=$kategori->urunler;
 
 
-        return view('kategori',compact('kategori','alt_kategoriler'));
+        return view('kategori',compact('kategori','alt_kategoriler','urunler'));
     }
+
+
 }
