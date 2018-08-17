@@ -15,6 +15,10 @@ Route::get('/','AnasayfaController@index')->name('anasayfa');
 
 Route::get('/kategori/{slug_kategoriadi}','KategoriController@index')->name('kategori');
 
+Route::post('/ara','UrunController@ara')->name('urun_ara');
+Route::get('/ara','UrunController@ara')->name('urun_ara'); //Diğer sayfaya geçiş
+
+
 Route::get('/urun/{slug_urunadi}','UrunController@index')->name('urun');
 
 Route::get('/sepet','SepetController@index')->name('sepet');
