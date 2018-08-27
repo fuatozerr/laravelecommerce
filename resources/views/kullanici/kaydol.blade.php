@@ -10,6 +10,10 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Kaydol</div>
                 <div class="panel-body">
+
+
+                 @include('layouts.partials.errors')
+
                     <form class="form-horizontal" role="form" method="POST" action="{{route('kullanici.kaydol')}}">
 
                         {{csrf_field()}}
