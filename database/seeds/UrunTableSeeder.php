@@ -3,6 +3,7 @@
 use App\Models\Urun;
 use App\Models\UrunDetay;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UrunTableSeeder extends Seeder
 {
@@ -14,8 +15,8 @@ class UrunTableSeeder extends Seeder
     public function run(Faker\Generator $faker)
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        Urun::truncate();
-        UrunDetay::truncate();
+//        Urun::truncate();
+//        UrunDetay::truncate();
 
         for($i=0;$i<30;$i++)
         {

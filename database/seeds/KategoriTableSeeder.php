@@ -14,7 +14,7 @@ class KategoriTableSeeder extends Seeder
     public function run()
     {
 
-        Kategori::truncate();
+//        Kategori::truncate();
 
         DB::table('kategori')->insert(['kategori_adi'=>'Dergi','slug'=>'dergi']);
 
