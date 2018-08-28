@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 
-use App\Kullanici;
+use App\Mail\KullaniciKayitMail;
+use App\Models\Kullanici;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 
@@ -13,6 +15,26 @@ class KullaniciController extends Controller
 {
     public function giris_form(){
         return view('kullanici.oturumac');
+    }
+
+
+    public function giris(){
+        $this->validate(request(),[
+            'email'=>'required|email',
+            'sifre'=>'required'
+        ]);
+
+        if(auth()->attempt(['email'=>request('email'),'password'=>request('sifre')],request()->has('benihatirla')))
+        {
+            request()->session()->regenerate();
+            return redirect()->intended('/');
+        }
+
+        else
+        {
+            $errors=['email'=>'Hatalı Giriş'];
+            return back()->withErrors($errors);
+        }
     }
 
     public function kaydol_form(){
@@ -43,7 +65,41 @@ class KullaniciController extends Controller
 
         ]);
 
+        Mail::to(request('email'))->send(new KullaniciKayitMail($kullanici));
+
         auth()->login($kullanici);
+        return redirect()->route('anasayfa');
+    }
+
+
+
+    public function aktiflestir($anahtar)
+    {
+
+        $kullanici=Kullanici::where('aktivasyon_anahtari',$anahtar)->first();
+
+        if(!is_null($kullanici))
+        {
+            $kullanici->aktivasyon_anahtari=null;
+            $kullanici->aktif_mi=1;
+            $kullanici->save();
+            return redirect()->route('anasayfa')->with('mesaj','kullanıcı Kaydınız aktifleştirildi')
+                ->with('mesaj_tur','success');
+        }
+
+        else
+        {
+            return redirect()->route('anasayfa')->with('mesaj','Kullanıcı kaydınız aktifleştirilemedi')
+                ->with('mesaj_tur','warning');
+        }
+
+    }
+
+    public function oturumukapat()
+    {
+        auth()->logout();
+        request()->session()->flush();
+        request()->session()->regenerate();
         return redirect()->route('anasayfa');
     }
 }

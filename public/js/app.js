@@ -13705,6 +13705,11 @@ module.exports = __webpack_require__(36);
 
 __webpack_require__(12);
 
+setTimeout(function () {
+
+  $('.alert').slideUp(500);
+});
+
 /***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {

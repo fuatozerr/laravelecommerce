@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
@@ -26,4 +26,10 @@ class Kullanici extends Authenticatable
      */
     protected $hidden = [
         'sifre', 'aktivasyon_anahtari'];
+
+
+    public function getAuthPassword()
+    {
+        return $this->sifre;
+    }
 }
