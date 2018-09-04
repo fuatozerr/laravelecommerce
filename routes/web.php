@@ -21,7 +21,18 @@ Route::get('/ara','UrunController@ara')->name('urun_ara'); //Diğer sayfaya geç
 
 Route::get('/urun/{slug_urunadi}','UrunController@index')->name('urun');
 
-Route::get('/sepet','SepetController@index')->name('sepet');
+Route::group(['prefix'=>'sepet'],function(){
+    Route::get('/','SepetController@index')->name('sepet');
+    Route::post('/ekle','SepetController@ekle')->name('sepet.ekle');
+    Route::delete('/kaldir/{rowid}','SepetController@kaldir')->name('sepet.kaldir');
+
+    Route::delete('/bosalt','SepetController@bosalt')->name('sepet.bosalt');
+    Route::patch('/guncelle/{rowid}','SepetController@guncelle')->name('sepet.guncelle');
+
+
+
+
+});
 
 Route::group(['middleware'=>'auth'],function (){ //giriş yapmış kişiler ulaşacak buralara
     Route::get('/odeme','OdemeController@index')->name('odeme');

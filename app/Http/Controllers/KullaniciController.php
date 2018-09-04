@@ -13,6 +13,12 @@ use Illuminate\Support\Str;
 
 class KullaniciController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('guest')->except('oturumukapat');
+    }
+
     public function giris_form(){
         return view('kullanici.oturumac');
     }
