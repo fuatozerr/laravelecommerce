@@ -34,6 +34,11 @@ Route::group(['prefix'=>'sepet'],function(){
 
 });
 
+Route::get('/odeme','OdemeController@index')->name('odeme');
+Route::post('/odeme','OdemeController@odemeyap')->name('odemeyap');
+
+
+
 Route::group(['middleware'=>'auth'],function (){ //giriş yapmış kişiler ulaşacak buralara
     Route::get('/odeme','OdemeController@index')->name('odeme');
     Route::get('/siparisler','SiparisController@index')->name('siparisler');

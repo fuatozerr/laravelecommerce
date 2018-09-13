@@ -11,6 +11,7 @@
                 <div class="panel-heading">Kaydol</div>
                 <div class="panel-body">
 
+                    @include('layouts.partials.alert')
 
                  @include('layouts.partials.errors')
 

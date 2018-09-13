@@ -66,6 +66,15 @@ class SepetController extends Controller
 
     public function bosalt()
     {
+
+        if(auth()->check())
+        {
+            $aktif_sepet_id=session('aktif_sepet_id');
+
+            SepetUrun::where('sepet_id',$aktif_sepet_id)->delete();
+        }
+
+
         Cart::destroy();
         return redirect()->route('sepet');
 
@@ -74,6 +83,21 @@ class SepetController extends Controller
 
     public function guncelle($rowid)
     {
+        if(auth()->check())
+        {
+            $aktif_sepet_id=session('aktif_sepet_id');
+            $cartItem=Cart::get($rowid);
+            if(request('adet')==0)
+                SepetUrun::where('sepet_id',$aktif_sepet_id)->where('urun_id',$cartItem->id)->delete();
+            else
+                SepetUrun::where('sepet_id',$aktif_sepet_id)->where('urun_id',$cartItem->id)->update(
+                [
+                    'adet'=>request('adet')
+                ]
+            );
+        }
+
+
 
         Cart::update($rowid,request('adet'));
 

@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 
 use App\Mail\KullaniciKayitMail;
 use App\Models\Kullanici;
+use App\Models\KullaniciDetay;
+use App\Models\Sepet;
+use App\Models\SepetUrun;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -33,6 +37,30 @@ class KullaniciController extends Controller
         if(auth()->attempt(['email'=>request('email'),'password'=>request('sifre')],request()->has('benihatirla')))
         {
             request()->session()->regenerate();
+
+            $aktif_sepet_id=Sepet::firstOrCreate(['kullanici_id'=>auth()->id()])->id;
+            session()->put('aktif_sepet_id',$aktif_sepet_id);
+
+            if(Cart::count()>0)
+            {
+                foreach (Cart::content() as $cartItem)
+                {
+                    SepetUrun::updateOrCreate([
+                       'sepet_id'=>$aktif_sepet_id,'urun_id'=>$cartItem->id ],
+                    ['adet'=>$cartItem->qty,'tutar'=>$cartItem->price,'durum'=>'beklemede']
+
+                   );
+                }
+            }
+
+            Cart::destroy();
+
+            $sepetUrunler=SepetUrun::where('sepet_id',$aktif_sepet_id)->get();
+            foreach ($sepetUrunler as $sepetUrun)
+            {
+                Cart::add($sepetUrun->urun->id,$sepetUrun->urun->urun_adi,$sepetUrun->adet,$sepetUrun->tutar,['slug'=>$sepetUrun->urun->slug]);
+            }
+
             return redirect()->intended('/');
         }
 
@@ -71,10 +99,14 @@ class KullaniciController extends Controller
 
         ]);
 
+        $kullanici->detay()->save(new KullaniciDetay());
+
         Mail::to(request('email'))->send(new KullaniciKayitMail($kullanici));
 
-        auth()->login($kullanici);
-        return redirect()->route('anasayfa');
+//        auth()->login($kullanici);
+//        return redirect()->route('anasayfa');
+        return redirect()->route('anasayfa')->with('mesaj','kullanıcı Kaydınızı aktifleştirmek için mail adresinize bakın')
+            ->with('mesaj_tur','success');
     }
 
 
