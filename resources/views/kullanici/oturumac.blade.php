@@ -14,7 +14,7 @@
 
                         @include('layouts.partials.errors')
                         <form class="form-horizontal" role="form" method="POST" action="{{route('kullanici.oturumac')}}">
-                        {{csrf_field()}}
+                            {{ csrf_field() }}
                             <div class="form-group">
                                 <label for="email" class="col-md-4 control-label">Email</label>
                                 <div class="col-md-6">
