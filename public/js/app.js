@@ -13689,7 +13689,9 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(11);
-module.exports = __webpack_require__(36);
+__webpack_require__(36);
+(function webpackMissingModule() { throw new Error("Cannot find module \"C:\\xampp\\htdocs\\L\\laravel\\Project\\resources\\assets\\sass\\admin-app.scss\""); }());
+module.exports = __webpack_require__(37);
 
 
 /***/ }),
@@ -35967,6 +35969,12 @@ module.exports = function spread(callback) {
 
 /***/ }),
 /* 36 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 37 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
