@@ -25,7 +25,7 @@ Route::group(['prefix'=>'yonetim','namespace'=>'yonetim'],function(){
 
         Route::group(['prefix'=>'kullanici'],function (){
 
-            Route::match(['get','post'],'/','KullaniciController@index')->name('yonetim.kullanici');
+                Route::match(['get','post'],'/','KullaniciController@index')->name('yonetim.kullanici');
             Route::get('/yeni','KullaniciController@form')->name('yonetim.kullanici.yeni');
 
             Route::get('/duzenle/{id}','KullaniciController@form')->name('yonetim.kullanici.duzenle');

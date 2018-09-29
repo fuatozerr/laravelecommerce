@@ -47,8 +47,15 @@ class KullaniciController extends Controller
 
     public function index()
     {
-        $list=Kullanici::orderByDesc('created_at')->paginate(8);
-
+        if(request()->filled('aranan'))
+        {
+            request()->flash();
+            $aranan=request('aranan');
+            $list=Kullanici::where('adsoyad','like',"%$aranan%")->orWhere('email','like',"%$aranan%")->paginate(8);
+        }
+        else {
+            $list = Kullanici::orderByDesc('created_at')->paginate(8);
+        }
         return view('yonetim.kullanici.index',compact('list'));
     }
 
@@ -65,6 +72,11 @@ class KullaniciController extends Controller
 
     public function kaydet($id=0) //id geldiyse güncelleme olcak 0 ise yeni kayıt olcak
     {
+       $this->validate(request(),[
+           'adsoyad' => 'required',
+           'email' => 'required|email'
+       ]);
+
             $data=request()->only('adsoyad','email');
             if(request()->filled('sifre'))
 
@@ -72,8 +84,8 @@ class KullaniciController extends Controller
                 $data['sifre']=Hash::make(request('sifre'));
             }
 
-            $data['aktif_mi']=request()->has('aktif_mi')? 1:0;
-            $data['yonetici_mi']=request()->has('yonetici_mi')? 1:0;
+            $data['aktif_mi']=request()->has('aktif_mi') && request('aktif_mi')==1 ?  1:0;
+            $data['yonetici_mi']=request()->has('yonetici_mi')&& request('yonetici_mi')==1? 1:0;
 
         if($id>0)
             {
@@ -95,5 +107,13 @@ class KullaniciController extends Controller
 
             return redirect()->route('yonetim.kullanici.duzenle',$entry->id);
 
+    }
+
+
+    public function sil($id)
+    {
+        Kullanici::destroy($id);
+        return redirect()
+            ->route('yonetim.kullanici');
     }
 }

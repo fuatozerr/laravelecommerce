@@ -23,13 +23,13 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="adsoyad">Ad Soyad</label>
-                <input type="text" class="form-control" id="adsoyad" name="adsoyad" placeholder="Adınız" value="{{$entry->adsoyad}}">
+                <input type="text" class="form-control" id="adsoyad" name="adsoyad" placeholder="Adınız" value="{{old('adsoyad',$entry->adsoyad)}}">
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="email">E Mail</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Mail" value="{{$entry->email}}">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Mail" value="{{old('email',$entry->email)}}">
             </div>
         </div>
         <div class="col-md-6">
@@ -43,7 +43,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label for="adres">Adres</label>
-                <input type="text" class="form-control" id="adres" name="adres" placeholder="adres" value="{{$entry->detay->adres}}">
+                <input type="text" class="form-control" id="adres" name="adres" placeholder="adres" value="{{old('adres',$entry->detay->adres)}}">
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label for="telefon">Telefon</label>
-                <input type="text" class="form-control" id="telefon" name="telefon" placeholder="telefon" value="{{$entry->detay->telefon}}">
+                <input type="text" class="form-control" id="telefon" name="telefon" placeholder="telefon" value="{{old('telefon',$entry->detay->telefon)}}">
             </div>
         </div>
     </div>
@@ -59,7 +59,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <label for="ceptelefon">Cep Telefon</label>
-                <input type="text" class="form-control" id="ceptelefon" name="ceptelefon" placeholder="ceptelefon" value="{{$entry->detay->ceptelefon}}">
+                <input type="text" class="form-control" id="ceptelefon" name="ceptelefon" placeholder="ceptelefon" value="{{old('ceptelefon',$entry->detay->ceptelefon)}}">
             </div>
         </div>
     </div>
@@ -67,13 +67,16 @@
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" name="aktif_mi" value="1" {{$entry->aktif_mi ? 'checked' : ''}}> Aktif Mi?
+            <input type="hidden" name="aktif_mi" value="0">
+            <input type="checkbox" name="aktif_mi" value="1" {{old('aktif_mi',$entry->aktif_mi ? 'checked' : '')}}> Aktif Mi?
         </label>
     </div>
 
     <div class="checkbox">
         <label>
-            <input type="checkbox" name="yonetici_mi" value="1" {{$entry->yonetici_mi ? 'checked' : ''}}> Yönetici Mi ?
+            <input type="hidden" name="yonetici_mi" value="0">
+
+            <input type="checkbox" name="yonetici_mi" value="1" {{old('yonetici_mi',$entry->yonetici_mi ? 'checked' : '')}}> Yönetici Mi ?
         </label>
     </div>
     {{--<button type="submit" class="btn btn-dark">Kaydet</button>--}}
