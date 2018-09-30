@@ -45,75 +45,75 @@ class KullaniciController extends Controller
         return redirect()->route('yonetim.oturumac');
     }
 
-    public function index()
-    {
-        if(request()->filled('aranan'))
+        public function index()
         {
-            request()->flash();
-            $aranan=request('aranan');
-            $list=Kullanici::where('adsoyad','like',"%$aranan%")->orWhere('email','like',"%$aranan%")->paginate(8);
-        }
-        else {
-            $list = Kullanici::orderByDesc('created_at')->paginate(8);
-        }
-        return view('yonetim.kullanici.index',compact('list'));
-    }
-
-    public function form($id=0)
-    {
-
-        $entry=new Kullanici;
-        if($id>0){
-            $entry=Kullanici::find($id);
-
-        }
-        return view('yonetim.kullanici.form',compact('entry'));
-    }
-
-    public function kaydet($id=0) //id geldiyse güncelleme olcak 0 ise yeni kayıt olcak
-    {
-       $this->validate(request(),[
-           'adsoyad' => 'required',
-           'email' => 'required|email'
-       ]);
-
-            $data=request()->only('adsoyad','email');
-            if(request()->filled('sifre'))
-
+            if(request()->filled('aranan'))
             {
-                $data['sifre']=Hash::make(request('sifre'));
+                request()->flash();
+                $aranan=request('aranan');
+                $list=Kullanici::where('adsoyad','like',"%$aranan%")->orWhere('email','like',"%$aranan%")->paginate(8);
             }
-
-            $data['aktif_mi']=request()->has('aktif_mi') && request('aktif_mi')==1 ?  1:0;
-            $data['yonetici_mi']=request()->has('yonetici_mi')&& request('yonetici_mi')==1? 1:0;
-
-        if($id>0)
-            {
-                $entry=Kullanici::where('id',$id)->firstOrFail();
-                $entry->update($data);
+            else {
+                $list = Kullanici::orderByDesc('created_at')->paginate(8);
             }
-            else
-            {
-                $entry=Kullanici::create($data);
+            return view('yonetim.kullanici.index',compact('list'));
+        }
+
+        public function form($id=0)
+        {
+
+            $entry=new Kullanici;
+            if($id>0){
+                $entry=Kullanici::find($id);
+
             }
+            return view('yonetim.kullanici.form',compact('entry'));
+        }
 
-            KullaniciDetay::updateOrCreate(          //Kullanıcı detayı güncellenmesi için yapıldı
-                ['kullanici_id'=>$entry->id],
-            [ 'adres'=>request('adres'),
-                'telefon'=>request('telefon'),
-                'ceptelefon'=>request('ceptelefon')
-                ]
-            );
+        public function kaydet($id=0) //id geldiyse güncelleme olcak 0 ise yeni kayıt olcak
+        {
+           $this->validate(request(),[
+               'adsoyad' => 'required',
+               'email' => 'required|email'
+           ]);
 
-            return redirect()->route('yonetim.kullanici.duzenle',$entry->id);
+                $data=request()->only('adsoyad','email');
+                if(request()->filled('sifre'))
 
-    }
+                {
+                    $data['sifre']=Hash::make(request('sifre'));
+                }
+
+                $data['aktif_mi']=request()->has('aktif_mi') && request('aktif_mi')==1 ?  1:0;
+                $data['yonetici_mi']=request()->has('yonetici_mi')&& request('yonetici_mi')==1? 1:0;
+
+            if($id>0)
+                {
+                    $entry=Kullanici::where('id',$id)->firstOrFail();
+                    $entry->update($data);
+                }
+                else
+                {
+                    $entry=Kullanici::create($data);
+                }
+
+                KullaniciDetay::updateOrCreate(          //Kullanıcı detayı güncellenmesi için yapıldı
+                    ['kullanici_id'=>$entry->id],
+                [ 'adres'=>request('adres'),
+                    'telefon'=>request('telefon'),
+                    'ceptelefon'=>request('ceptelefon')
+                    ]
+                );
+
+                return redirect()->route('yonetim.kullanici.duzenle',$entry->id);
+
+        }
 
 
-    public function sil($id)
-    {
-        Kullanici::destroy($id);
-        return redirect()
-            ->route('yonetim.kullanici');
-    }
+        public function sil($id)
+        {
+            Kullanici::destroy($id);
+            return redirect()
+                ->route('yonetim.kullanici');
+        }
 }
