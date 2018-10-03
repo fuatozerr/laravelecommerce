@@ -10,7 +10,7 @@ class KategoriController extends Controller
 {
     public function index()
     {
-        if(request()->filled('aranan')|| request()->filled('ust_id'))
+        if(request()->filled('aranan')  || request()->filled('ust_id'))
         {
             request()->flash();
             $aranan=request('aranan');
